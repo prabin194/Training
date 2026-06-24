@@ -6,8 +6,8 @@ use App\Enums\PostStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\Category;
-use App\Models\Tag;
 use App\Models\Media;
+use App\Models\Tag;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -16,6 +16,8 @@ class DashboardController extends Controller
     public function stats(Request $request): JsonResponse
     {
         $user = $request->user();
+
+        $isModerator = $user->isAdmin() || $user->isEditor();
 
         return response()->json([
             'stats' => [
@@ -29,6 +31,9 @@ class DashboardController extends Controller
                 'in_review_posts' => Post::where('user_id', $user->id)
                     ->where('status', PostStatus::InReview)
                     ->count(),
+                'pending_review_count' => $isModerator
+                    ? Post::where('status', PostStatus::InReview)->count()
+                    : 0,
                 'categories_count' => Category::count(),
                 'tags_count' => Tag::count(),
                 'media_count' => Media::where('user_id', $user->id)->count(),

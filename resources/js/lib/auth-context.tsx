@@ -14,6 +14,7 @@ interface User {
   name: string;
   email: string;
   mobile_no: string | null;
+  role: string;
   onboarding_status: string | null;
   email_verified_at: string | null;
   created_at: string;
