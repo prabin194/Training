@@ -30,16 +30,24 @@ const navMain = [
   },
   {
     title: "Posts",
-    url: "#",
+    url: "/posts",
     icon: FileText,
     items: [
       {
         title: "All Posts",
-        url: "#",
+        url: "/posts",
       },
       {
         title: "Create New",
-        url: "#",
+        url: "/posts/create",
+      },
+      {
+        title: "Categories",
+        url: "/categories",
+      },
+      {
+        title: "Tags",
+        url: "/tags",
       },
     ],
   },

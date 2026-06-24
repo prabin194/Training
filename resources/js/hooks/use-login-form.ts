@@ -12,7 +12,7 @@ export function useLoginForm() {
   const [requiresEmailVerification, setRequiresEmailVerification] = useState<string | null>(null);
   const [resendMessage, setResendMessage] = useState<string | null>(null);
   const [resendCooldown, setResendCooldown] = useState(0);
-  const cooldownRef = useRef<ReturnType<typeof setInterval>>();
+  const cooldownRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Clean up cooldown interval on unmount
   useEffect(() => {
@@ -29,15 +29,16 @@ export function useLoginForm() {
 
   const startCooldown = () => {
     setResendCooldown(60);
-    cooldownRef.current = setInterval(() => {
+    const interval = setInterval(() => {
       setResendCooldown((prev) => {
         if (prev <= 1) {
-          clearInterval(cooldownRef.current);
+          clearInterval(interval);
           return 0;
         }
         return prev - 1;
       });
     }, 1000);
+    cooldownRef.current = interval;
   };
 
   async function onSubmit(data: LoginFormData) {

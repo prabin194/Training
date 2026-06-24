@@ -13,6 +13,10 @@ import SettingsPage from "@/pages/settings";
 import DevicesPage from "@/pages/devices";
 import ActivityLogsPage from "@/pages/activity-logs";
 import HomePage from "@/pages/home";
+import PostsPage from "@/pages/posts";
+import PostCreatePage from "@/pages/posts-create";
+import CategoriesPage from "@/pages/categories";
+import TagsPage from "@/pages/tags";
 import type { ReactNode } from "react";
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
@@ -73,6 +77,46 @@ function AuthRoutes() {
         element={
           <ProtectedRoute>
             <ActivityLogsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/posts"
+        element={
+          <ProtectedRoute>
+            <PostsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/posts/create"
+        element={
+          <ProtectedRoute>
+            <PostCreatePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/posts/:id/edit"
+        element={
+          <ProtectedRoute>
+            <PostCreatePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/categories"
+        element={
+          <ProtectedRoute>
+            <CategoriesPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/tags"
+        element={
+          <ProtectedRoute>
+            <TagsPage />
           </ProtectedRoute>
         }
       />

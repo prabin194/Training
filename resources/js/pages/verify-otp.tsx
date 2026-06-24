@@ -24,7 +24,7 @@ export default function VerifyOtpPage() {
   const [isResending, setIsResending] = useState(false);
   const [resendCooldown, setResendCooldown] = useState(0);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
-  const cooldownRef = useRef<ReturnType<typeof setInterval>>();
+  const cooldownRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const uid = searchParams.get("uid");
 
   // Clean up cooldown interval on unmount
@@ -44,15 +44,16 @@ export default function VerifyOtpPage() {
 
   const startCooldown = () => {
     setResendCooldown(60);
-    cooldownRef.current = setInterval(() => {
+    const interval = setInterval(() => {
       setResendCooldown((prev) => {
         if (prev <= 1) {
-          clearInterval(cooldownRef.current);
+          clearInterval(interval);
           return 0;
         }
         return prev - 1;
       });
     }, 1000);
+    cooldownRef.current = interval;
   };
 
   const handleChange = (index: number, value: string) => {
