@@ -68,6 +68,11 @@ class Post extends Model
         return $this->belongsTo(Media::class, 'featured_image_id');
     }
 
+    public function transitions(): HasMany
+    {
+        return $this->hasMany(PostStatusTransition::class);
+    }
+
     public function scopePublished($query)
     {
         return $query->where('status', PostStatus::Published);
@@ -76,5 +81,10 @@ class Post extends Model
     public function scopeDraft($query)
     {
         return $query->where('status', PostStatus::Draft);
+    }
+
+    public function scopeInReview($query)
+    {
+        return $query->where('status', PostStatus::InReview);
     }
 }

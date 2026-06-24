@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\OnboardingStatus;
+use App\Enums\UserRole;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -21,10 +22,26 @@ class User extends Authenticatable
         'name',
         'email',
         'mobile_no',
+        'role',
         'password',
         'email_verified_at',
         'onboarding_status',
     ];
+
+    public function isAdmin(): bool
+    {
+        return $this->role === UserRole::Admin->value;
+    }
+
+    public function isEditor(): bool
+    {
+        return $this->role === UserRole::Editor->value;
+    }
+
+    public function isAuthor(): bool
+    {
+        return $this->role === UserRole::Author->value;
+    }
 
     protected $hidden = [
         'password',
