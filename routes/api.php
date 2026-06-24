@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\MediaController;
 use App\Http\Controllers\Api\PostController;
+use App\Http\Controllers\Api\AdminController;
 use App\Http\Controllers\Api\ReviewController;
 use App\Http\Controllers\Api\TagController;
 use App\Http\Controllers\AuthController;
@@ -54,10 +55,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Activity Logs
     Route::get('/activity-logs', [ActivityLogController::class, 'index']);
 
-    // Blog Posts
-    Route::apiResource('posts', PostController::class);
-
-    // Review / Workflow
+    // Review / Workflow (must be BEFORE apiResource to avoid route conflicts)
     Route::get('/posts/review/pending', [ReviewController::class, 'pendingReviews']);
     Route::post('/posts/{post}/submit-review', [ReviewController::class, 'submitForReview']);
     Route::post('/posts/{post}/approve', [ReviewController::class, 'approve']);
@@ -65,7 +63,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/posts/{post}/publish', [ReviewController::class, 'publish']);
     Route::get('/posts/{post}/transitions', [ReviewController::class, 'transitions']);
     Route::get('/posts/{post}/allowed-transitions', [ReviewController::class, 'allowedTransitions']);
+
+    // Blog Posts
+    Route::apiResource('posts', PostController::class);
     Route::apiResource('categories', CategoryController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
     Route::apiResource('tags', TagController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
     Route::apiResource('media', MediaController::class);
+
+    // Admin - User Management
+    Route::get('/users', [AdminController::class, 'users']);
+    Route::put('/users/{user}/role', [AdminController::class, 'updateRole']);
 });

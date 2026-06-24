@@ -17,6 +17,8 @@ import PostsPage from "@/pages/posts";
 import PostCreatePage from "@/pages/posts-create";
 import CategoriesPage from "@/pages/categories";
 import TagsPage from "@/pages/tags";
+import ReviewQueuePage from "@/pages/review-queue";
+import AdminUsersPage from "@/pages/admin-users";
 import type { ReactNode } from "react";
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
@@ -117,6 +119,22 @@ function AuthRoutes() {
         element={
           <ProtectedRoute>
             <TagsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/review-queue"
+        element={
+          <ProtectedRoute>
+            <ReviewQueuePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/users"
+        element={
+          <ProtectedRoute>
+            <AdminUsersPage />
           </ProtectedRoute>
         }
       />

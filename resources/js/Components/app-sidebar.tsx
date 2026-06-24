@@ -3,12 +3,14 @@
 import * as React from "react"
 import {
   BookOpen,
+  CheckCircle,
   Frame,
   History,
   LayoutDashboard,
   Settings,
   Smartphone,
   FileText,
+  Users,
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -27,6 +29,11 @@ const navMain = [
     title: "Dashboard",
     url: "/dashboard",
     icon: LayoutDashboard,
+  },
+  {
+    title: "Review Queue",
+    url: "/review-queue",
+    icon: CheckCircle,
   },
   {
     title: "Posts",
@@ -48,6 +55,17 @@ const navMain = [
       {
         title: "Tags",
         url: "/tags",
+      },
+    ],
+  },
+  {
+    title: "Admin",
+    url: "#",
+    icon: Users,
+    items: [
+      {
+        title: "Manage Users",
+        url: "/admin/users",
       },
     ],
   },

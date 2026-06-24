@@ -167,3 +167,75 @@ export async function uploadMedia(file: File, altText?: string): Promise<MediaIt
 export async function deleteMedia(id: number): Promise<void> {
   await api.delete(`/media/${id}`);
 }
+
+// Workflow / Review
+
+export interface Transition {
+  id: number;
+  from_status: string;
+  to_status: string;
+  comment: string | null;
+  user_name: string;
+  created_at: string;
+}
+
+export async function submitForReview(id: number, comment?: string): Promise<Post> {
+  const response = await api.post(`/posts/${id}/submit-review`, { comment });
+  return response.data.post;
+}
+
+export async function approvePost(id: number, comment?: string): Promise<Post> {
+  const response = await api.post(`/posts/${id}/approve`, { comment });
+  return response.data.post;
+}
+
+export async function rejectPost(id: number, comment: string): Promise<Post> {
+  const response = await api.post(`/posts/${id}/reject`, { comment });
+  return response.data.post;
+}
+
+export async function publishPost(id: number): Promise<Post> {
+  const response = await api.post(`/posts/${id}/publish`);
+  return response.data.post;
+}
+
+export async function fetchPendingReviews(params?: {
+  page?: number;
+  per_page?: number;
+}): Promise<PaginatedResponse<Post>> {
+  const response = await api.get("/posts/review/pending", { params });
+  return response.data;
+}
+
+export async function fetchTransitions(id: number): Promise<Transition[]> {
+  const response = await api.get(`/posts/${id}/transitions`);
+  return response.data.transitions;
+}
+
+export async function fetchAllowedTransitions(id: number): Promise<string[]> {
+  const response = await api.get(`/posts/${id}/allowed-transitions`);
+  return response.data.allowed_transitions;
+}
+
+// Admin - Users
+
+export interface UserItem {
+  id: number;
+  uid: string;
+  name: string;
+  email: string;
+  role: string;
+  created_at: string;
+}
+
+export async function fetchUsers(params?: {
+  page?: number;
+}): Promise<PaginatedResponse<UserItem>> {
+  const response = await api.get("/users", { params });
+  return response.data;
+}
+
+export async function updateUserRole(id: number, role: string): Promise<UserItem> {
+  const response = await api.put(`/users/${id}/role`, { role });
+  return response.data.user;
+}
