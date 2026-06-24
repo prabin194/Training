@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ActivityLogController;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\MediaController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\TagController;
@@ -45,6 +46,9 @@ Route::middleware('auth:sanctum')->group(function () {
     // Devices
     Route::get('/devices', [DeviceController::class, 'index']);
     Route::delete('/devices/{deviceLog}', [DeviceController::class, 'destroy']);
+
+    // Dashboard
+    Route::get('/dashboard/stats', [DashboardController::class, 'stats']);
 
     // Activity Logs
     Route::get('/activity-logs', [ActivityLogController::class, 'index']);
