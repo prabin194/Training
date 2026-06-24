@@ -1,6 +1,10 @@
 <?php
 
 use App\Http\Controllers\ActivityLogController;
+use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\MediaController;
+use App\Http\Controllers\Api\PostController;
+use App\Http\Controllers\Api\TagController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DeviceController;
 use App\Http\Controllers\ProfileController;
@@ -44,4 +48,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Activity Logs
     Route::get('/activity-logs', [ActivityLogController::class, 'index']);
+
+    // Blog Posts
+    Route::apiResource('posts', PostController::class);
+    Route::apiResource('categories', CategoryController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
+    Route::apiResource('tags', TagController::class)->only(['index', 'store', 'show', 'update', 'destroy']);
+    Route::apiResource('media', MediaController::class);
 });
