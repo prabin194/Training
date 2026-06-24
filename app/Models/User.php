@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\OnboardingStatus;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
@@ -46,23 +47,33 @@ class User extends Authenticatable
         });
     }
 
-    public function otps()
+    public function otps(): HasMany
     {
         return $this->hasMany(Otp::class);
     }
 
-    public function loginLogs()
+    public function loginLogs(): HasMany
     {
         return $this->hasMany(LoginLog::class);
     }
 
-    public function deviceLogs()
+    public function deviceLogs(): HasMany
     {
         return $this->hasMany(DeviceLog::class);
     }
 
-    public function activityLogs()
+    public function activityLogs(): HasMany
     {
         return $this->hasMany(ActivityLog::class);
+    }
+
+    public function posts(): HasMany
+    {
+        return $this->hasMany(Post::class, 'user_id');
+    }
+
+    public function media(): HasMany
+    {
+        return $this->hasMany(Media::class);
     }
 }
