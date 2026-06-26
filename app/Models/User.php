@@ -93,4 +93,29 @@ class User extends Authenticatable
     {
         return $this->hasMany(Media::class);
     }
+
+    public function socialConnections(): HasMany
+    {
+        return $this->hasMany(SocialConnection::class);
+    }
+
+    public function scheduleEntries(): HasMany
+    {
+        return $this->hasMany(ScheduleEntry::class);
+    }
+
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(\App\Models\Notification::class);
+    }
+
+    public function sentMessages(): HasMany
+    {
+        return $this->hasMany(\App\Models\Message::class, 'sender_id');
+    }
+
+    public function receivedMessages(): HasMany
+    {
+        return $this->hasMany(\App\Models\Message::class, 'receiver_id');
+    }
 }
