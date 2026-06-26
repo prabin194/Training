@@ -2,15 +2,16 @@
 
 import * as React from "react"
 import {
-  BookOpen,
   CheckCircle,
-  Frame,
-  History,
   LayoutDashboard,
   Settings,
-  Smartphone,
   FileText,
   Users,
+  Share2,
+  Calendar as CalendarIcon,
+  History,
+  TrendingUp,
+  Mail,
 } from "lucide-react"
 
 import { NavMain } from "@/components/nav-main"
@@ -59,6 +60,17 @@ const navMain = [
     ],
   },
   {
+    title: "Analytics",
+    url: "/analytics",
+    icon: TrendingUp,
+    items: [
+      {
+        title: "Dashboard",
+        url: "/analytics",
+      },
+    ],
+  },
+  {
     title: "Admin",
     url: "#",
     icon: Users,
@@ -66,6 +78,51 @@ const navMain = [
       {
         title: "Manage Users",
         url: "/admin/users",
+      },
+      {
+        title: "System Analytics",
+        url: "/admin/analytics",
+      },
+    ],
+  },
+  {
+    title: "Schedule",
+    url: "/scheduling",
+    icon: CalendarIcon,
+    items: [
+      {
+        title: "Content Calendar",
+        url: "/scheduling",
+      },
+      {
+        title: "Publishing History",
+        url: "/publishing-history",
+      },
+    ],
+  },
+  {
+    title: "Social",
+    url: "/social-connections",
+    icon: Share2,
+    items: [
+      {
+        title: "Social Connections",
+        url: "/social-connections",
+      },
+    ],
+  },
+  {
+    title: "Messaging",
+    url: "/messages",
+    icon: Mail,
+    items: [
+      {
+        title: "Messages",
+        url: "/messages",
+      },
+      {
+        title: "Notifications",
+        url: "/notifications",
       },
     ],
   },

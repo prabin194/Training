@@ -239,3 +239,68 @@ export async function updateUserRole(id: number, role: string): Promise<UserItem
   const response = await api.put(`/users/${id}/role`, { role });
   return response.data.user;
 }
+
+// Social Connections (Phase 4)
+
+export interface SocialConnection {
+  id: number;
+  provider: "facebook_page" | "instagram_business";
+  provider_account_id: string;
+  name: string;
+  metadata: Record<string, unknown> | null;
+  is_expired: boolean;
+  created_at: string;
+}
+
+export async function fetchSocialConnections(): Promise<SocialConnection[]> {
+  const response = await api.get("/social/connections");
+  return response.data.connections;
+}
+
+// Schedule Entries (Phase 5)
+
+export interface ScheduleEntry {
+  id: number;
+  title: string;
+  start: string;
+  allDay: boolean;
+  backgroundColor: string;
+  borderColor: string;
+  extendedProps: {
+    platform: string;
+    status: string;
+    content: string | null;
+    image_url: string | null;
+    account_name: string | null;
+    post_id: number | null;
+    failure_reason: string | null;
+    retry_count: number;
+  };
+}
+
+export async function fetchScheduleEntries(params?: {
+  start?: string;
+  end?: string;
+}): Promise<ScheduleEntry[]> {
+  const response = await api.get("/schedule/entries", { params });
+  return response.data.entries;
+}
+
+export async function createScheduleEntry(data: {
+  social_connection_id: number;
+  platform: string;
+  content?: string | null;
+  image_url?: string | null;
+  scheduled_at: string;
+  post_id?: number;
+}): Promise<void> {
+  await api.post("/schedule/entries", data);
+}
+
+export async function deleteScheduleEntry(id: number): Promise<void> {
+  await api.delete(`/schedule/entries/${id}`);
+}
+
+export async function rescheduleEntry(id: number, scheduledAt: string): Promise<void> {
+  await api.put(`/schedule/entries/${id}/reschedule`, { scheduled_at: scheduledAt });
+}

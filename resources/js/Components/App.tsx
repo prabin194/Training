@@ -19,6 +19,13 @@ import CategoriesPage from "@/pages/categories";
 import TagsPage from "@/pages/tags";
 import ReviewQueuePage from "@/pages/review-queue";
 import AdminUsersPage from "@/pages/admin-users";
+import SocialConnectionsPage from "@/pages/social-connections";
+import SchedulingPage from "@/pages/scheduling";
+import PublishingHistoryPage from "@/pages/publishing-history";
+import AnalyticsPage from "@/pages/analytics";
+import AdminAnalyticsPage from "@/pages/analytics-admin";
+import MessagesPage from "@/pages/messages";
+import NotificationsPage from "@/pages/notifications";
 import type { ReactNode } from "react";
 
 function ProtectedRoute({ children }: { children: ReactNode }) {
@@ -135,6 +142,62 @@ function AuthRoutes() {
         element={
           <ProtectedRoute>
             <AdminUsersPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/social-connections"
+        element={
+          <ProtectedRoute>
+            <SocialConnectionsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/scheduling"
+        element={
+          <ProtectedRoute>
+            <SchedulingPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/publishing-history"
+        element={
+          <ProtectedRoute>
+            <PublishingHistoryPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/analytics"
+        element={
+          <ProtectedRoute>
+            <AnalyticsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/admin/analytics"
+        element={
+          <ProtectedRoute>
+            <AdminAnalyticsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/messages"
+        element={
+          <ProtectedRoute>
+            <MessagesPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/notifications"
+        element={
+          <ProtectedRoute>
+            <NotificationsPage />
           </ProtectedRoute>
         }
       />

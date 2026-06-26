@@ -73,4 +73,40 @@ Route::middleware('auth:sanctum')->group(function () {
     // Admin - User Management
     Route::get('/users', [AdminController::class, 'users']);
     Route::put('/users/{user}/role', [AdminController::class, 'updateRole']);
+
+    // Social Connections (OAuth)
+    Route::get('/social/connections', [\App\Http\Controllers\Api\SocialController::class, 'index']);
+    Route::post('/social/facebook/connect', [\App\Http\Controllers\Api\SocialController::class, 'connectFacebook']);
+    Route::get('/social/facebook/callback', [\App\Http\Controllers\Api\SocialController::class, 'callbackFacebook']);
+    Route::delete('/social/connections/{connection}', [\App\Http\Controllers\Api\SocialController::class, 'disconnect']);
+
+    // Schedule Entries
+    Route::get('/schedule/entries', [\App\Http\Controllers\Api\ScheduleController::class, 'index']);
+    Route::post('/schedule/entries', [\App\Http\Controllers\Api\ScheduleController::class, 'store']);
+    Route::put('/schedule/entries/{entry}', [\App\Http\Controllers\Api\ScheduleController::class, 'update']);
+    Route::put('/schedule/entries/{entry}/reschedule', [\App\Http\Controllers\Api\ScheduleController::class, 'reschedule']);
+    Route::delete('/schedule/entries/{entry}', [\App\Http\Controllers\Api\ScheduleController::class, 'destroy']);
+
+    // Publishing History & Retry (Phase 6)
+    Route::get('/schedule/history', [\App\Http\Controllers\Api\ScheduleController::class, 'history']);
+    Route::post('/schedule/entries/{entry}/retry', [\App\Http\Controllers\Api\ScheduleController::class, 'retry']);
+
+    // Analytics (Phase 7)
+    Route::get('/analytics', [\App\Http\Controllers\Api\AnalyticsController::class, 'index']);
+    Route::get('/analytics/export', [\App\Http\Controllers\Api\AnalyticsController::class, 'export']);
+    Route::get('/analytics/admin', [\App\Http\Controllers\Api\AnalyticsController::class, 'admin'])->middleware('can:admin');
+
+    // Messages (Phase 8)
+    Route::get('/messages/inbox', [\App\Http\Controllers\Api\MessageController::class, 'inbox']);
+    Route::get('/messages/sent', [\App\Http\Controllers\Api\MessageController::class, 'sent']);
+    Route::post('/messages', [\App\Http\Controllers\Api\MessageController::class, 'store']);
+    Route::get('/messages/users', [\App\Http\Controllers\Api\MessageController::class, 'users']);
+    Route::get('/messages/{message}', [\App\Http\Controllers\Api\MessageController::class, 'show']);
+    Route::delete('/messages/{message}', [\App\Http\Controllers\Api\MessageController::class, 'destroy']);
+
+    // Notifications (Phase 8)
+    Route::get('/notifications', [\App\Http\Controllers\Api\NotificationController::class, 'index']);
+    Route::get('/notifications/unread-count', [\App\Http\Controllers\Api\NotificationController::class, 'unreadCount']);
+    Route::post('/notifications/{notification}/read', [\App\Http\Controllers\Api\NotificationController::class, 'markRead']);
+    Route::post('/notifications/mark-all-read', [\App\Http\Controllers\Api\NotificationController::class, 'markAllRead']);
 });

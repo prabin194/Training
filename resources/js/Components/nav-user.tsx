@@ -1,13 +1,13 @@
+import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/lib/auth-context";
 import {
   BadgeCheck,
   Bell,
   ChevronsUpDown,
-  CreditCard,
   LogOut,
-  Sparkles,
+  FileText,
 } from "lucide-react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import {
   Avatar,
@@ -29,11 +29,28 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import api from "@/lib/api";
 
 export function NavUser() {
   const { isMobile } = useSidebar();
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  const fetchUnreadCount = useCallback(async () => {
+    try {
+      const response = await api.get("/notifications/unread-count");
+      setUnreadCount(response.data.count);
+    } catch {
+      // ignore polling errors
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchUnreadCount();
+    const interval = setInterval(fetchUnreadCount, 30000); // Poll every 30s
+    return () => clearInterval(interval);
+  }, [fetchUnreadCount]);
 
   const initials = user?.name
     ?.split(" ")
@@ -109,9 +126,25 @@ export function NavUser() {
                 <BadgeCheck />
                 Account
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bell />
+              <DropdownMenuItem onClick={() => navigate("/notifications")}>
+                <div className="relative">
+                  <Bell />
+                  {unreadCount > 0 && (
+                    <span className="absolute -top-1.5 -right-1.5 flex size-4 items-center justify-center rounded-full bg-primary text-[9px] font-bold text-primary-foreground">
+                      {unreadCount > 9 ? "9+" : unreadCount}
+                    </span>
+                  )}
+                </div>
                 Notifications
+                {unreadCount > 0 && (
+                  <span className="ml-auto text-xs text-muted-foreground">
+                    {unreadCount} new
+                  </span>
+                )}
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => navigate("/messages")}>
+                <FileText />
+                Messages
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />

@@ -30,6 +30,18 @@ class ReviewController extends Controller
                 $request->input('comment')
             );
 
+            // Notify editors/admins about the new review submission
+            $editors = \App\Models\User::whereIn('role', ['admin', 'editor'])->where('id', '!=', $request->user()->id)->get();
+            foreach ($editors as $editor) {
+                \App\Models\Notification::notify(
+                    $editor,
+                    'review_submitted',
+                    "New review: {$post->title}",
+                    "{$request->user()->name} submitted \"{$post->title}\" for review.",
+                    ['post_id' => $post->id, 'author_id' => $request->user()->id]
+                );
+            }
+
             return response()->json([
                 'message' => 'Post submitted for review.',
                 'post' => new PostResource($post->load(['author', 'categories', 'tags', 'featuredImage'])),
@@ -53,6 +65,17 @@ class ReviewController extends Controller
                 $request->user(),
                 $request->input('comment')
             );
+
+            // Notify the post author
+            if ($post->author && $post->author->id !== $request->user()->id) {
+                \App\Models\Notification::notify(
+                    $post->author,
+                    'review_approved',
+                    "Post approved: {$post->title}",
+                    "{$request->user()->name} approved \"{$post->title}\".",
+                    ['post_id' => $post->id, 'reviewer_id' => $request->user()->id]
+                );
+            }
 
             return response()->json([
                 'message' => 'Post approved.',
@@ -79,6 +102,17 @@ class ReviewController extends Controller
                 $request->user(),
                 $request->input('comment')
             );
+
+            // Notify the post author
+            if ($post->author && $post->author->id !== $request->user()->id) {
+                \App\Models\Notification::notify(
+                    $post->author,
+                    'review_rejected',
+                    "Post rejected: {$post->title}",
+                    "{$request->user()->name} rejected \"{$post->title}\". Comment: {$request->input('comment')}",
+                    ['post_id' => $post->id, 'reviewer_id' => $request->user()->id, 'comment' => $request->input('comment')]
+                );
+            }
 
             return response()->json([
                 'message' => 'Post rejected.',
