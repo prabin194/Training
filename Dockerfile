@@ -8,10 +8,7 @@ RUN apk add --no-cache \
 
 RUN docker-php-ext-install pdo_mysql mysqli mbstring exif pcntl bcmath gd zip
 
-RUN curl -fsSL https://fnm.vercel.app/install | bash && \
-    ln -s /root/.local/share/fnm/aliases/default/bin/node /usr/local/bin/node && \
-    ln -s /root/.local/share/fnm/aliases/default/bin/npm /usr/local/bin/npm && \
-    ln -s /root/.local/share/fnm/aliases/default/bin/npx /usr/local/bin/npx
+RUN apk add --no-cache nodejs npm
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
@@ -20,8 +17,6 @@ FROM base AS builder
 COPY . .
 
 RUN composer install --no-dev --optimize-autoloader --no-interaction
-
-ENV PATH="/root/.local/share/fnm/aliases/default/bin:$PATH"
 
 RUN npm ci && npm run build
 
