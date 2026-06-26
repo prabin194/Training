@@ -16,7 +16,11 @@ RUN apk add --no-cache nodejs npm
 
 COPY . .
 
+RUN cp .env.example .env || true
+
 RUN composer install --no-dev --optimize-autoloader --no-interaction
+
+RUN php artisan key:generate
 
 RUN npm ci && npm run build
 
