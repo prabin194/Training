@@ -22,11 +22,9 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 RUN php artisan key:generate
 
-RUN touch database/database.sqlite && php artisan migrate --force
-
 RUN npm ci && npm run build
 
-RUN php artisan config:cache && php artisan route:cache && php artisan view:cache && php artisan event:cache
+RUN php artisan route:cache && php artisan view:cache && php artisan event:cache
 
 RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache
 
@@ -34,4 +32,4 @@ FROM base AS runtime
 
 COPY --from=builder /app /app
 
-CMD php artisan serve --host=0.0.0.0 --port=$PORT
+CMD for i in $(seq 1 30); do php artisan migrate --force 2>/dev/null && break; echo "Waiting for MySQL..." && sleep 2; done && php artisan serve --host=0.0.0.0 --port=$PORT
