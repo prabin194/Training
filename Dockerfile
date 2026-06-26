@@ -22,6 +22,8 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 RUN php artisan key:generate
 
+RUN touch database/database.sqlite && php artisan migrate --force
+
 RUN npm ci && npm run build
 
 RUN php artisan config:cache && php artisan route:cache && php artisan view:cache && php artisan event:cache
