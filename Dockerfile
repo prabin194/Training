@@ -8,11 +8,11 @@ RUN apk add --no-cache \
 
 RUN docker-php-ext-install pdo_mysql mysqli mbstring exif pcntl bcmath gd zip
 
-RUN apk add --no-cache nodejs npm
-
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 FROM base AS builder
+
+RUN apk add --no-cache nodejs npm
 
 COPY . .
 
@@ -26,9 +26,7 @@ RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache
 
 FROM base AS runtime
 
-COPY --from=builder /app/vendor /app/vendor
-COPY --from=builder /app/public /app/public
-COPY --from=builder /app/bootstrap /app/bootstrap
+COPY --from=builder /app /app
 
 EXPOSE 9000
 
